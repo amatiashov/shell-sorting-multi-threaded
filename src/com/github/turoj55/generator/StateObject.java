@@ -1,21 +1,21 @@
 package com.github.turoj55.generator;
 
-class StateObject {
+public class StateObject {
      private boolean canWork;
 
-    StateObject(){
+    public StateObject(){
         canWork = true;
     }
 
-    synchronized void changeState(){
+    public synchronized void changeState(){
         canWork = false;
     }
 
-    synchronized boolean getState(){
+    public synchronized boolean getState(){
         return canWork;
     }
 
-    synchronized void reset(){
+    public synchronized void reset(){
         canWork = true;
     }
 }

@@ -2,19 +2,21 @@ package com.github.turoj55;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import com.github.turoj55.generator.StateObject;
 
-class PlainShell{
+class PlainShell implements Runnable{
     private int[] array;
     private final ArrayList<Integer> steps = new ArrayList<>();
-
+    private StateObject stateObject;
 
     PlainShell(int[] array) {
         this.array = array;
+        this.stateObject = new StateObject();
     }
 
 
-
-    void sort(){
+    @Override
+    public void run() {
         // генерируем шаги сортироки
         genSteps(array.length);
 
@@ -24,6 +26,23 @@ class PlainShell{
                     swap(j-step, j);
                 }
             }
+        stateObject.changeState();
+    }
+
+    void sort(){
+        System.out.printf("Sorting array");
+        (new Thread(this)).start();
+
+        while (stateObject.getState()){
+            System.out.printf(".");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("OK!");
+        stateObject.reset();
     }
 
     private void swap(int i, int j){
@@ -39,7 +58,7 @@ class PlainShell{
             public int compare(Integer int1, Integer int2) {
                 if (int1 < int2)
                     return 1;
-                else if (int1 == int2)
+                else if (int1.equals(int2))
                     return 0;
                 else return -1;
             }
@@ -58,8 +77,6 @@ class PlainShell{
                 this.steps.add(steps[i++]);
             this.steps.trimToSize();
             this.steps.sort(new ReversCompare());
-            System.out.printf("Шаги сортировки: ");
-            System.out.println(this.steps.toString());
             return;
         }
         /**
@@ -93,8 +110,6 @@ class PlainShell{
         steps.sort(new ReversCompare());
         if (i > 0)
             steps.remove(0);
-        System.out.printf("Шаги сортировки: ");
-        System.out.println(steps.toString());
     }
 
 }
