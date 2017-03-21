@@ -27,8 +27,10 @@ class ThreadsShell implements Runnable{
         if (currentStep < 0 || startItem < 0)
             throw new IllegalArgumentException("currentStep and startItem must be not null");
 
-        for (int j = startItem; (j > 0) && (array[j-currentStep] > array[j]); j -= currentStep) {
-            swap(j-currentStep, j);
+        for (int i = startItem; i < array.length; i += currentStep) {
+            for (int j = i; (j >= currentStep) && (array[j - currentStep] > array[j]); j -= currentStep) {
+                swap(j - currentStep, j);
+            }
         }
     }
 
@@ -38,7 +40,8 @@ class ThreadsShell implements Runnable{
 
         Thread currentThread;
         for (int step: steps) {
-            for (int i = step; i < array.length; i += step) {
+            System.out.println(step);
+            for (int i = 0; i < step; i += 1) {
                 currentThread = new Thread(new ThreadsShell(step, i));
                 threads.add(currentThread);
                 currentThread.start();
